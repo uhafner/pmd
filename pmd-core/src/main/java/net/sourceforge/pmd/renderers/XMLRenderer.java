@@ -4,26 +4,6 @@
 
 package net.sourceforge.pmd.renderers;
 
-import java.io.File;
-import java.io.IOException;
-import java.io.OutputStream;
-import java.io.OutputStreamWriter;
-import java.io.UnsupportedEncodingException;
-import java.io.Writer;
-import java.nio.charset.Charset;
-import java.nio.charset.StandardCharsets;
-import java.nio.file.Files;
-import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.Iterator;
-import java.util.Locale;
-import javax.xml.XMLConstants;
-import javax.xml.stream.XMLOutputFactory;
-import javax.xml.stream.XMLStreamException;
-import javax.xml.stream.XMLStreamWriter;
-
-import org.apache.commons.lang3.StringUtils;
-
 import net.sourceforge.pmd.PMDVersion;
 import net.sourceforge.pmd.internal.util.IOUtil;
 import net.sourceforge.pmd.properties.PropertyDescriptor;
@@ -31,6 +11,20 @@ import net.sourceforge.pmd.properties.PropertyFactory;
 import net.sourceforge.pmd.reporting.Report;
 import net.sourceforge.pmd.reporting.RuleViolation;
 import net.sourceforge.pmd.util.StringUtil;
+import org.apache.commons.lang3.StringUtils;
+
+import javax.xml.XMLConstants;
+import javax.xml.stream.XMLOutputFactory;
+import javax.xml.stream.XMLStreamException;
+import javax.xml.stream.XMLStreamWriter;
+import java.io.*;
+import java.nio.charset.Charset;
+import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.Iterator;
+import java.util.Locale;
 
 /**
  * Renderer to XML format.
@@ -40,7 +34,7 @@ public class XMLRenderer extends AbstractIncrementingRenderer {
     public static final String NAME = "xml";
 
     public static final PropertyDescriptor<String> ENCODING =
-        PropertyFactory.stringProperty("encoding").desc("XML encoding format").defaultValue("UTF-8").build();
+            PropertyFactory.stringProperty("encoding").desc("XML encoding format").defaultValue("UTF-8").build();
 
     private static final String PMD_REPORT_NS_URI = "http://pmd.sourceforge.net/report/2.0.0";
     private static final String PMD_REPORT_NS_LOCATION = "https://pmd.github.io/schema/report_2_0_0.xsd";
@@ -60,19 +54,32 @@ public class XMLRenderer extends AbstractIncrementingRenderer {
         setProperty(ENCODING, encoding);
     }
 
+    public XMLRenderer(String name, String description) {
+        super(name, description);
+        definePropertyDescriptor(ENCODING);
+    }
+
+    /* default */ XMLStreamWriter getXmlWriter() {
+        return xmlWriter;
+    }
+
     @Override
     public String defaultFileExtension() {
         return "xml";
     }
 
-    @Override
-    public void start() throws IOException {
+    /* default */ void initLineSeparator() throws UnsupportedEncodingException {
         String encoding = getProperty(ENCODING);
         String unmarkedEncoding = toUnmarkedEncoding(encoding);
         lineSeparator = System.lineSeparator().getBytes(unmarkedEncoding);
+    }
+
+    @Override
+    public void start() throws IOException {
+        initLineSeparator();
 
         try {
-            xmlWriter.writeStartDocument(encoding, "1.0");
+            xmlWriter.writeStartDocument(getProperty(ENCODING), "1.0");
             writeNewLine();
             xmlWriter.setDefaultNamespace(PMD_REPORT_NS_URI);
             xmlWriter.writeStartElement(PMD_REPORT_NS_URI, "pmd");
@@ -113,9 +120,9 @@ public class XMLRenderer extends AbstractIncrementingRenderer {
      * Outputs a platform dependent line separator.
      *
      * @throws XMLStreamException if XMLStreamWriter couldn't be flushed.
-     * @throws IOException if an I/O error occurs.
+     * @throws IOException        if an I/O error occurs.
      */
-    private void writeNewLine() throws XMLStreamException, IOException {
+    /* default */  void writeNewLine() throws XMLStreamException, IOException {
         /*
          * Note: we are not using xmlWriter.writeCharacters(PMD.EOL), because some
          * XMLStreamWriter implementations might do extra encoding for \r and/or \n.

@@ -4,20 +4,15 @@
 
 package net.sourceforge.pmd.renderers;
 
-import java.lang.reflect.Constructor;
-import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Modifier;
-import java.util.Collections;
-import java.util.Map;
-import java.util.Properties;
-import java.util.Set;
-import java.util.TreeMap;
-
+import net.sourceforge.pmd.properties.PropertyDescriptor;
+import net.sourceforge.pmd.util.AssertionUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import net.sourceforge.pmd.properties.PropertyDescriptor;
-import net.sourceforge.pmd.util.AssertionUtil;
+import java.lang.reflect.Constructor;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Modifier;
+import java.util.*;
 
 /**
  * This class handles the creation of Renderers.
@@ -48,10 +43,12 @@ public final class RendererFactory {
         map.put(EmptyRenderer.NAME, EmptyRenderer.class);
         map.put(JsonRenderer.NAME, JsonRenderer.class);
         map.put(SarifRenderer.NAME, SarifRenderer.class);
+        map.put(MetricsRenderer.METRICS_NAME, MetricsRenderer.class);
         REPORT_FORMAT_TO_RENDERER = Collections.unmodifiableMap(map);
     }
 
-    private RendererFactory() { }
+    private RendererFactory() {
+    }
 
     /**
      * Retrieves a collection of all supported renderer names.
@@ -65,10 +62,8 @@ public final class RendererFactory {
     /**
      * Construct an instance of a Renderer based on report format name.
      *
-     * @param reportFormat
-     *            The report format name.
-     * @param properties
-     *            Initialization properties for the corresponding Renderer.
+     * @param reportFormat The report format name.
+     * @param properties   Initialization properties for the corresponding Renderer.
      * @return A Renderer instance.
      */
     public static Renderer createRenderer(String reportFormat, Properties properties) {
@@ -105,7 +100,7 @@ public final class RendererFactory {
         // Warn about legacy report format usages
         if (REPORT_FORMAT_TO_RENDERER.containsKey(reportFormat) && !reportFormat.equals(renderer.getName())) {
             LOG.warn("Report format '{}' is deprecated, and has been replaced with '{}'. "
-                    + "Future versions of PMD will remove support for this deprecated Report format usage.",
+                            + "Future versions of PMD will remove support for this deprecated Report format usage.",
                     reportFormat, renderer.getName());
         }
         return renderer;

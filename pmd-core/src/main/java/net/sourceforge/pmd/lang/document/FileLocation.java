@@ -4,16 +4,15 @@
 
 package net.sourceforge.pmd.lang.document;
 
-import java.util.Comparator;
-import java.util.Objects;
-
-import org.checkerframework.checker.nullness.qual.Nullable;
-
 import net.sourceforge.pmd.lang.ast.GenericToken;
 import net.sourceforge.pmd.lang.ast.Node;
 import net.sourceforge.pmd.reporting.Reportable;
 import net.sourceforge.pmd.reporting.RuleViolation;
 import net.sourceforge.pmd.util.AssertionUtil;
+import org.checkerframework.checker.nullness.qual.Nullable;
+
+import java.util.Comparator;
+import java.util.Objects;
 
 /**
  * Represents the coordinates of a text region, used for reporting. This provides access
@@ -26,12 +25,12 @@ import net.sourceforge.pmd.util.AssertionUtil;
 public final class FileLocation {
 
     public static final Comparator<FileLocation> COORDS_COMPARATOR =
-        Comparator.comparing(FileLocation::getStartPos)
-                  .thenComparing(FileLocation::getEndPos);
+            Comparator.comparing(FileLocation::getStartPos)
+                    .thenComparing(FileLocation::getEndPos);
 
 
     public static final Comparator<FileLocation> COMPARATOR =
-        Comparator.comparing(FileLocation::getFileId).thenComparing(COORDS_COMPARATOR);
+            Comparator.comparing(FileLocation::getFileId).thenComparing(COORDS_COMPARATOR);
 
     private final int beginLine;
     private final int endLine;
@@ -70,22 +69,30 @@ public final class FileLocation {
         return fileName;
     }
 
-    /** Inclusive, 1-based line number. */
+    /**
+     * Inclusive, 1-based line number.
+     */
     public int getStartLine() {
         return beginLine;
     }
 
-    /** Inclusive, 1-based line number. */
+    /**
+     * Inclusive, 1-based line number.
+     */
     public int getEndLine() {
         return endLine;
     }
 
-    /** Inclusive, 1-based column number. */
+    /**
+     * Inclusive, 1-based column number.
+     */
     public int getStartColumn() {
         return beginColumn;
     }
 
-    /** <b>Exclusive</b>, 1-based column number. */
+    /**
+     * <b>Exclusive</b>, 1-based column number.
+     */
     public int getEndColumn() {
         return endColumn;
     }
@@ -112,7 +119,9 @@ public final class FileLocation {
         return TextRange2d.range2d(beginLine, beginColumn, endLine, endColumn);
     }
 
-    /** Returns the region in the file, or null if this was not available. */
+    /**
+     * Returns the region in the file, or null if this was not available.
+     */
     public @Nullable TextRegion getRegionInFile() {
         return region;
     }
@@ -148,10 +157,10 @@ public final class FileLocation {
         TextPos2d start = range2d.getStartPos();
         TextPos2d end = range2d.getEndPos();
         return new FileLocation(fileName,
-                                start.getLine(),
-                                start.getColumn(),
-                                end.getLine(),
-                                end.getColumn());
+                start.getLine(),
+                start.getColumn(),
+                end.getLine(),
+                end.getColumn());
     }
 
     /**
@@ -160,9 +169,7 @@ public final class FileLocation {
      * @param fileName File name
      * @param line     Line number
      * @param column   Column number
-     *
      * @return A new location
-     *
      * @throws IllegalArgumentException See {@link #range(FileId, TextRange2d)}
      */
     public static FileLocation caret(FileId fileName, int line, int column) {
@@ -173,5 +180,23 @@ public final class FileLocation {
     @Override
     public String toString() {
         return "!debug only! " + startPosToStringWithFile();
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) {
+            return true;
+        }
+        if (!(o instanceof FileLocation)) {
+            return false;
+        }
+        FileLocation that = (FileLocation) o;
+        return beginLine == that.beginLine && endLine == that.endLine && beginColumn == that.beginColumn && endColumn == that.endColumn && Objects.equals(
+                fileName, that.fileName) && Objects.equals(region, that.region);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(beginLine, endLine);
     }
 }
