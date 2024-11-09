@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
     <artifactId>pmd-core</artifactId>
     <name>PMD Core</name>
@@ -12,7 +11,7 @@
         <relativePath>../pom.xml</relativePath>
     </parent>
 
-    <version>7.7.0-metrics-2-SNAPSHOT</version>
+    <version>7.7.0-metrics-2</version>
 
     <properties>
         <!-- default values for the properties provided by git-commit-id-maven-plugin -->
@@ -91,7 +90,7 @@
                 <artifactId>maven-javadoc-plugin</artifactId>
                 <configuration>
                     <!-- overrides the configuration from parent pom: we have here no offline links yet -->
-                    <offlineLinks combine.self="override"/>
+                    <offlineLinks combine.self="override" />
                 </configuration>
             </plugin>
 
@@ -173,4 +172,8 @@
             <scope>test</scope>
         </dependency>
     </dependencies>
+
+  <scm>
+    <tag>pmd_releases/7.7.0-metrics-2</tag>
+  </scm>
 </project>
