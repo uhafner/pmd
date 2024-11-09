@@ -11,7 +11,7 @@
         <relativePath>../pom.xml</relativePath>
     </parent>
 
-    <version>7.7.0-metrics-2</version>
+    <version>7.7.0-metrics-3-SNAPSHOT</version>
 
     <properties>
         <!-- default values for the properties provided by git-commit-id-maven-plugin -->
@@ -172,8 +172,4 @@
             <scope>test</scope>
         </dependency>
     </dependencies>
-
-  <scm>
-    <tag>pmd_releases/7.7.0-metrics-2</tag>
-  </scm>
 </project>
