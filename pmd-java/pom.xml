@@ -1,15 +1,18 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
     <artifactId>pmd-java</artifactId>
     <name>PMD Java</name>
 
     <parent>
-        <groupId>net.sourceforge.pmd</groupId>
+        <groupId>edu.hm.hafner</groupId>
         <artifactId>pmd</artifactId>
-        <version>7.7.0</version>
+        <version>7.7.0-metrics-2</version>
         <relativePath>../pom.xml</relativePath>
     </parent>
+
+    <version>7.7.0-metrics-2-SNAPSHOT</version>
 
     <properties>
         <log4j.version>2.23.0</log4j.version>
@@ -44,6 +47,29 @@
             </resource>
         </resources>
         <plugins>
+            <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>flatten-maven-plugin</artifactId>
+                <version>1.6.0</version>
+                <configuration>
+                    <updatePomFile>true</updatePomFile>
+                </configuration>
+                <executions>
+                    <execution>
+                        <id>flatten</id>
+                        <phase>process-resources</phase>
+                        <goals>
+                            <goal>flatten</goal>
+                        </goals>
+                        <configuration>
+                            <flattenMode>ossrh</flattenMode>
+                            <flattenDependencyMode>all</flattenDependencyMode>
+                            <outputDirectory>${project.build.directory}</outputDirectory>
+                            <flattenedPomFilename>${project.artifactId}-${project.version}.pom</flattenedPomFilename>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
             <plugin>
                 <artifactId>maven-resources-plugin</artifactId>
                 <configuration>
@@ -106,8 +132,8 @@
                             <target>
                                 <ant antfile="${javacc.ant.wrapper}" target="alljavacc">
                                     <property name="plugin-classpath" refid="maven.plugin.classpath"/>
-                                    <property name="lang-name" value="Java" />
-                                    <property name="lang-id" value="java" />
+                                    <property name="lang-name" value="Java"/>
+                                    <property name="lang-id" value="java"/>
                                 </ant>
                             </target>
                         </configuration>
@@ -115,39 +141,13 @@
                 </executions>
             </plugin>
 
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-checkstyle-plugin</artifactId>
-                <configuration>
-                    <suppressionsLocation>pmd-java-checkstyle-suppressions.xml</suppressionsLocation>
-                </configuration>
-            </plugin>
-
-            <plugin>
-                <groupId>com.github.siom79.japicmp</groupId>
-                <artifactId>japicmp-maven-plugin</artifactId>
-                <configuration>
-                    <parameter>
-                        <excludes combine.children="append">
-                            <exclude>net.sourceforge.pmd.lang.java.internal</exclude>
-                            <exclude>net.sourceforge.pmd.lang.java.ast.internal</exclude>
-                            <exclude>net.sourceforge.pmd.lang.java.metrics.internal</exclude>
-                            <exclude>net.sourceforge.pmd.lang.java.rule.internal</exclude>
-                            <exclude>net.sourceforge.pmd.lang.java.rule.xpath.internal</exclude>
-                            <exclude>net.sourceforge.pmd.lang.java.symbols.internal</exclude>
-                            <exclude>net.sourceforge.pmd.lang.java.symbols.table.internal</exclude>
-                            <exclude>net.sourceforge.pmd.lang.java.types.internal</exclude>
-                            <exclude>net.sourceforge.pmd.lang.java.types.ast.internal</exclude>
-                        </excludes>
-                    </parameter>
-                </configuration>
-            </plugin>
         </plugins>
     </build>
     <dependencies>
         <dependency>
-            <groupId>net.sourceforge.pmd</groupId>
+            <groupId>edu.hm.hafner</groupId>
             <artifactId>pmd-core</artifactId>
+            <version>7.7.0-metrics</version>
         </dependency>
         <dependency>
             <groupId>org.ow2.asm</groupId>
@@ -295,4 +295,8 @@
             </exclusions>
         </dependency>
     </dependencies>
+
+    <scm>
+        <tag>pmd_releases/7.7.0-metrics</tag>
+    </scm>
 </project>

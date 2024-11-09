@@ -1,15 +1,18 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
     <artifactId>pmd-core</artifactId>
     <name>PMD Core</name>
 
     <parent>
-        <groupId>net.sourceforge.pmd</groupId>
+        <groupId>edu.hm.hafner</groupId>
         <artifactId>pmd</artifactId>
-        <version>7.7.0</version>
+        <version>7.7.0-metrics-2</version>
         <relativePath>../pom.xml</relativePath>
     </parent>
+
+    <version>7.7.0-metrics-2-SNAPSHOT</version>
 
     <properties>
         <!-- default values for the properties provided by git-commit-id-maven-plugin -->
@@ -26,6 +29,29 @@
         </resources>
 
         <plugins>
+            <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>flatten-maven-plugin</artifactId>
+                <version>1.6.0</version>
+                <configuration>
+                    <updatePomFile>true</updatePomFile>
+                </configuration>
+                <executions>
+                    <execution>
+                        <id>flatten</id>
+                        <phase>process-resources</phase>
+                        <goals>
+                            <goal>flatten</goal>
+                        </goals>
+                        <configuration>
+                            <flattenMode>ossrh</flattenMode>
+                            <flattenDependencyMode>all</flattenDependencyMode>
+                            <outputDirectory>${project.build.directory}</outputDirectory>
+                            <flattenedPomFilename>${project.artifactId}-${project.version}.pom</flattenedPomFilename>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
             <plugin>
                 <groupId>io.github.git-commit-id</groupId>
                 <artifactId>git-commit-id-maven-plugin</artifactId>
@@ -48,14 +74,6 @@
                 </configuration>
             </plugin>
             <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-checkstyle-plugin</artifactId>
-                <configuration>
-                    <suppressionsLocation>pmd-core-checkstyle-suppressions.xml</suppressionsLocation>
-                </configuration>
-            </plugin>
-
-            <plugin>
                 <!-- package test sources for use by other submodules -->
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-jar-plugin</artifactId>
@@ -73,29 +91,10 @@
                 <artifactId>maven-javadoc-plugin</artifactId>
                 <configuration>
                     <!-- overrides the configuration from parent pom: we have here no offline links yet -->
-                    <offlineLinks combine.self="override"></offlineLinks>
+                    <offlineLinks combine.self="override"/>
                 </configuration>
             </plugin>
 
-            <plugin>
-                <groupId>com.github.siom79.japicmp</groupId>
-                <artifactId>japicmp-maven-plugin</artifactId>
-                <configuration>
-                    <parameter>
-                        <excludes combine.children="append">
-                            <exclude>net.sourceforge.pmd.internal</exclude>
-                            <exclude>net.sourceforge.pmd.cache.internal</exclude>
-                            <exclude>net.sourceforge.pmd.cpd.internal</exclude>
-                            <exclude>net.sourceforge.pmd.lang.ast.internal</exclude>
-                            <exclude>net.sourceforge.pmd.lang.rule.internal</exclude>
-                            <exclude>net.sourceforge.pmd.lang.rule.xpath.internal</exclude>
-                            <exclude>net.sourceforge.pmd.properties.internal</exclude>
-                            <exclude>net.sourceforge.pmd.renderers.internal</exclude>
-                            <exclude>net.sourceforge.pmd.util.internal</exclude>
-                        </excludes>
-                    </parameter>
-                </configuration>
-            </plugin>
         </plugins>
     </build>
     <dependencies>

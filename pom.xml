@@ -1,14 +1,16 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
-    <groupId>net.sourceforge.pmd</groupId>
+    <groupId>edu.hm.hafner</groupId>
     <artifactId>pmd</artifactId>
-    <version>7.7.0</version>
+    <version>7.7.0-metrics-2</version>
     <packaging>pom</packaging>
     <name>PMD</name>
 
     <description>
-        PMD is an extensible multilanguage static code analyzer. It finds common programming flaws like unused variables,
+        PMD is an extensible multilanguage static code analyzer. It finds common programming flaws like unused
+        variables,
         empty catch blocks, unnecessary object creation, and so forth. It's mainly concerned with Java and
         Apex, but supports 16 other languages. It comes with 400+ built-in rules. It can be
         extended with custom rules. It uses JavaCC and Antlr to parse source files into abstract syntax trees
@@ -65,14 +67,14 @@
         <tag>pmd_releases/7.7.0</tag>
     </scm>
     <distributionManagement>
-        <snapshotRepository>
-            <id>ossrh</id>
-            <url>https://oss.sonatype.org/content/repositories/snapshots</url>
-        </snapshotRepository>
         <repository>
             <id>ossrh</id>
-            <url>https://oss.sonatype.org/service/local/staging/deploy/maven2/</url>
+            <url>https://s01.oss.sonatype.org/service/local/staging/deploy/maven2/</url>
         </repository>
+        <snapshotRepository>
+            <id>ossrh</id>
+            <url>https://s01.oss.sonatype.org/content/repositories/snapshots</url>
+        </snapshotRepository>
     </distributionManagement>
     <organization>
         <name>PMD</name>
@@ -83,6 +85,8 @@
     </issueManagement>
 
     <properties>
+        <base-project.version>7.7.0</base-project.version>
+
         <project.build.outputTimestamp>2024-10-25T06:47:53Z</project.build.outputTimestamp>
 
         <java.version>8</java.version>
@@ -113,7 +117,7 @@
         <pmd.website.baseurl>https://docs.pmd-code.org/snapshot</pmd.website.baseurl>
 
         <argLine>-Xmx512m -Dfile.encoding=${project.build.sourceEncoding} ${extraArgLine}</argLine>
-        <extraArgLine /> <!-- empty by default, profiles set it as needed -->
+        <extraArgLine/> <!-- empty by default, profiles set it as needed -->
 
         <pmd.build-tools.version>27</pmd.build-tools.version>
 
@@ -192,7 +196,7 @@
                     <version>3.0.1</version>
                     <configuration>
                         <releaseProfiles>pmd-release,sign</releaseProfiles>
-                        <pushChanges>true</pushChanges>
+                        <pushChanges>false</pushChanges>
                         <localCheckout>true</localCheckout>
                         <autoVersionSubmodules>true</autoVersionSubmodules>
                         <tagNameFormat>pmd_releases/@{project.version}</tagNameFormat>
@@ -343,12 +347,16 @@
                         <runOrder>alphabetical</runOrder>
                         <systemPropertyVariables>
                             <!-- used by pmd-lang-test::net.sourceforge.pmd.lang.test.BaseTextComparisonTest -->
-                            <mvn.project.src.test.resources>${project.build.testResources[0].directory}</mvn.project.src.test.resources>
+                            <mvn.project.src.test.resources>${project.build.testResources[0].directory}
+                            </mvn.project.src.test.resources>
                             <!-- https://kotest.io/docs/framework/project-config.html#runtime-detection -->
-                            <kotest.framework.classpath.scanning.config.disable>true</kotest.framework.classpath.scanning.config.disable>
-                            <kotest.framework.classpath.scanning.autoscan.disable>true</kotest.framework.classpath.scanning.autoscan.disable>
+                            <kotest.framework.classpath.scanning.config.disable>true
+                            </kotest.framework.classpath.scanning.config.disable>
+                            <kotest.framework.classpath.scanning.autoscan.disable>true
+                            </kotest.framework.classpath.scanning.autoscan.disable>
                         </systemPropertyVariables>
-                        <statelessTestsetInfoReporter implementation="net.sourceforge.pmd.buildtools.surefire.PMDStatelessTestSetInfoConsoleReporter">
+                        <statelessTestsetInfoReporter
+                                implementation="net.sourceforge.pmd.buildtools.surefire.PMDStatelessTestSetInfoConsoleReporter">
                             <showFailedTests>true</showFailedTests>
                             <showSuccessfulTests>false</showSuccessfulTests>
                             <showSkippedTests>true</showSkippedTests>
@@ -357,7 +365,8 @@
                             <usePhrasedClassNameInTestCaseSummary>true</usePhrasedClassNameInTestCaseSummary>
                         </statelessTestsetInfoReporter>
 
-                        <statelessTestsetReporter implementation="org.apache.maven.plugin.surefire.extensions.junit5.JUnit5Xml30StatelessReporter">
+                        <statelessTestsetReporter
+                                implementation="org.apache.maven.plugin.surefire.extensions.junit5.JUnit5Xml30StatelessReporter">
                             <usePhrasedFileName>true</usePhrasedFileName>
                             <usePhrasedTestSuiteClassName>true</usePhrasedTestSuiteClassName>
                             <usePhrasedTestCaseClassName>true</usePhrasedTestCaseClassName>
@@ -396,15 +405,15 @@
                         <offlineLinks>
                             <offlineLink>
                                 <location>${project.basedir}/../pmd-core/target/apidocs</location>
-                                <url>../../pmd-core/${project.version}</url>
+                                <url>../../pmd-core/${base-project.version}</url>
                             </offlineLink>
                             <offlineLink>
                                 <location>${project.basedir}/../pmd-test/target/apidocs</location>
-                                <url>../../pmd-test/${project.version}</url>
+                                <url>../../pmd-test/${base-project.version}</url>
                             </offlineLink>
                             <offlineLink>
                                 <location>${project.basedir}/../pmd-lang-test/target/dokkaJavadocJar</location>
-                                <url>../../pmd-lang-test/${project.version}</url>
+                                <url>../../pmd-lang-test/${base-project.version}</url>
                             </offlineLink>
                         </offlineLinks>
                         <tags>
@@ -423,13 +432,27 @@
                                 <placement>a</placement>
                                 <head>Implementation Note:</head>
                             </tag>
-                            <tag><name>param</name></tag>
-                            <tag><name>return</name></tag>
-                            <tag><name>throws</name></tag>
-                            <tag><name>since</name></tag>
-                            <tag><name>version</name></tag>
-                            <tag><name>serialData</name></tag>
-                            <tag><name>see</name></tag>
+                            <tag>
+                                <name>param</name>
+                            </tag>
+                            <tag>
+                                <name>return</name>
+                            </tag>
+                            <tag>
+                                <name>throws</name>
+                            </tag>
+                            <tag>
+                                <name>since</name>
+                            </tag>
+                            <tag>
+                                <name>version</name>
+                            </tag>
+                            <tag>
+                                <name>serialData</name>
+                            </tag>
+                            <tag>
+                                <name>see</name>
+                            </tag>
                         </tags>
                     </configuration>
                 </plugin>
@@ -442,16 +465,20 @@
                         <skip>${dokka.skip}</skip>
                         <externalDocumentationLinks>
                             <link>
-                                <url>https://docs.pmd-code.org/apidocs/pmd-core/${project.version}/</url>
-                                <packageListUrl>file://${project.basedir}/../pmd-core/target/apidocs/element-list</packageListUrl>
+                                <url>https://docs.pmd-code.org/apidocs/pmd-core/${base-project.version}/</url>
+                                <packageListUrl>file://${project.basedir}/../pmd-core/target/apidocs/element-list
+                                </packageListUrl>
                             </link>
                             <link>
-                                <url>https://docs.pmd-code.org/apidocs/pmd-test/${project.version}/</url>
-                                <packageListUrl>file://${project.basedir}/../pmd-test/target/apidocs/element-list</packageListUrl>
+                                <url>https://docs.pmd-code.org/apidocs/pmd-test/${base-project.version}/</url>
+                                <packageListUrl>file://${project.basedir}/../pmd-test/target/apidocs/element-list
+                                </packageListUrl>
                             </link>
                             <link>
-                                <url>https://docs.pmd-code.org/apidocs/pmd-lang-test/${project.version}/</url>
-                                <packageListUrl>file:///${project.basedir}/../pmd-lang-test/target/dokkaJavadocJar/element-list</packageListUrl>
+                                <url>https://docs.pmd-code.org/apidocs/pmd-lang-test/${base-project.version}/</url>
+                                <packageListUrl>
+                                    file:///${project.basedir}/../pmd-lang-test/target/dokkaJavadocJar/element-list
+                                </packageListUrl>
                             </link>
                         </externalDocumentationLinks>
                     </configuration>
@@ -463,40 +490,6 @@
                             </goals>
                         </execution>
                     </executions>
-                </plugin>
-                <plugin>
-                    <groupId>org.apache.maven.plugins</groupId>
-                    <artifactId>maven-checkstyle-plugin</artifactId>
-                    <version>${checkstyle.plugin.version}</version>
-                    <executions>
-                        <execution>
-                            <id>checkstyle-check</id>
-                            <phase>verify</phase>
-                            <goals>
-                                <goal>check</goal>
-                            </goals>
-                        </execution>
-                    </executions>
-                    <dependencies>
-                        <dependency>
-                            <groupId>com.puppycrawl.tools</groupId>
-                            <artifactId>checkstyle</artifactId>
-                            <version>${checkstyle.version}</version>
-                        </dependency>
-                        <dependency>
-                            <groupId>net.sourceforge.pmd</groupId>
-                            <artifactId>pmd-build-tools-config</artifactId>
-                            <version>${pmd.build-tools.version}</version>
-                        </dependency>
-                    </dependencies>
-                    <configuration>
-                        <configLocation>/net/sourceforge/pmd/pmd-checkstyle-config.xml</configLocation>
-                        <suppressionsLocation>/net/sourceforge/pmd/pmd-checkstyle-suppressions.xml</suppressionsLocation>
-                        <includeTestSourceDirectory>true</includeTestSourceDirectory>
-                        <excludeGeneratedSources>true</excludeGeneratedSources>
-                        <includes>**/*.java,**/*.kt</includes>
-                        <resourceIncludes>**/*.properties,**/*.less</resourceIncludes>
-                    </configuration>
                 </plugin>
                 <plugin>
                     <groupId>org.apache.maven.plugins</groupId>
@@ -654,31 +647,6 @@
                         </lifecycleMappingMetadata>
                     </configuration>
                 </plugin>
-
-                <plugin>
-                    <groupId>com.github.siom79.japicmp</groupId>
-                    <artifactId>japicmp-maven-plugin</artifactId>
-                    <version>0.23.0</version>
-                    <configuration>
-                        <parameter>
-                            <breakBuildBasedOnSemanticVersioning>true</breakBuildBasedOnSemanticVersioning>
-                            <onlyModified>true</onlyModified>
-                            <excludes>
-                                <exclude>@net.sourceforge.pmd.annotation.Experimental</exclude>
-                                <exclude>@net.sourceforge.pmd.annotation.InternalApi</exclude>
-                            </excludes>
-                        </parameter>
-                    </configuration>
-                    <executions>
-                        <execution>
-                            <id>japicmp</id>
-                            <phase>verify</phase>
-                            <goals>
-                                <goal>cmp</goal>
-                            </goals>
-                        </execution>
-                    </executions>
-                </plugin>
             </plugins>
         </pluginManagement>
         <plugins>
@@ -735,11 +703,6 @@
             </plugin>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-checkstyle-plugin</artifactId>
-                <!-- configuration is in plugin management section -->
-            </plugin>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-javadoc-plugin</artifactId>
                 <executions>
                     <execution>
@@ -768,7 +731,9 @@
                 <extensions>true</extensions>
                 <configuration>
                     <serverId>ossrh</serverId>
-                    <nexusUrl>https://oss.sonatype.org/</nexusUrl>
+                    <nexusUrl>https://s01.oss.sonatype.org/</nexusUrl>
+                    <autoReleaseAfterClose>true</autoReleaseAfterClose>
+                    <stagingProgressTimeoutMinutes>15</stagingProgressTimeoutMinutes>
                 </configuration>
             </plugin>
             <plugin>
@@ -794,11 +759,6 @@
                         </configuration>
                     </execution>
                 </executions>
-            </plugin>
-            <!-- Enable japicmp for all modules by default -->
-            <plugin>
-                <groupId>com.github.siom79.japicmp</groupId>
-                <artifactId>japicmp-maven-plugin</artifactId>
             </plugin>
         </plugins>
     </build>
@@ -838,17 +798,17 @@
             <dependency>
                 <groupId>net.sourceforge.pmd</groupId>
                 <artifactId>pmd-core</artifactId>
-                <version>${project.version}</version>
+                <version>${base-project.version}</version>
             </dependency>
             <dependency>
                 <groupId>net.sourceforge.pmd</groupId>
                 <artifactId>pmd-ant</artifactId>
-                <version>${project.version}</version>
+                <version>${base-project.version}</version>
             </dependency>
             <dependency>
                 <groupId>net.sourceforge.pmd</groupId>
                 <artifactId>pmd-test-schema</artifactId>
-                <version>${project.version}</version>
+                <version>${base-project.version}</version>
             </dependency>
             <dependency>
                 <groupId>org.checkerframework</groupId>
@@ -881,9 +841,9 @@
                 <version>${slf4j.version}</version>
             </dependency>
             <dependency>
-              <groupId>org.slf4j</groupId>
-              <artifactId>jul-to-slf4j</artifactId>
-              <version>${slf4j.version}</version>
+                <groupId>org.slf4j</groupId>
+                <artifactId>jul-to-slf4j</artifactId>
+                <version>${slf4j.version}</version>
             </dependency>
             <dependency>
                 <groupId>org.apache.groovy</groupId>
@@ -922,14 +882,14 @@
             <dependency>
                 <groupId>net.sourceforge.pmd</groupId>
                 <artifactId>pmd-test</artifactId>
-                <version>${project.version}</version>
+                <version>${base-project.version}</version>
                 <scope>test</scope>
             </dependency>
 
             <dependency>
                 <groupId>net.sourceforge.pmd</groupId>
                 <artifactId>pmd-lang-test</artifactId>
-                <version>${project.version}</version>
+                <version>${base-project.version}</version>
                 <scope>test</scope>
             </dependency>
 
@@ -1197,7 +1157,7 @@
         <profile>
             <id>pmd-release</id>
             <properties>
-                <pmd.website.baseurl>https://docs.pmd-code.org/pmd-doc-${project.version}</pmd.website.baseurl>
+                <pmd.website.baseurl>https://docs.pmd-code.org/pmd-doc-${base-project.version}</pmd.website.baseurl>
             </properties>
         </profile>
         <profile>
@@ -1250,7 +1210,6 @@
                 <cpd.skip>true</cpd.skip>
                 <cyclonedx.skip>true</cyclonedx.skip>
                 <dokka.skip>true</dokka.skip>
-                <japicmp.skip>true</japicmp.skip>
             </properties>
         </profile>
 
@@ -1327,52 +1286,11 @@
                     <name>!skip-cli-dist</name>
                 </property>
             </activation>
-            <modules>
-                <module>pmd-cli</module>
-                <module>pmd-dist</module>
-            </modules>
         </profile>
     </profiles>
 
     <modules>
-        <module>pmd-apex</module>
-        <module>pmd-coco</module>
         <module>pmd-core</module>
-        <module>pmd-cpp</module>
-        <module>pmd-cs</module>
-        <module>pmd-dart</module>
-        <module>pmd-doc</module>
-        <module>pmd-fortran</module>
-        <module>pmd-gherkin</module>
-        <module>pmd-go</module>
-        <module>pmd-groovy</module>
-        <module>pmd-html</module>
-        <module>pmd-lua</module>
         <module>pmd-java</module>
-        <module>pmd-javascript</module>
-        <module>pmd-jsp</module>
-        <module>pmd-julia</module>
-        <module>pmd-kotlin</module>
-        <module>pmd-lang-test</module>
-        <module>pmd-matlab</module>
-        <module>pmd-modelica</module>
-        <module>pmd-objectivec</module>
-        <module>pmd-perl</module>
-        <module>pmd-php</module>
-        <module>pmd-plsql</module>
-        <module>pmd-python</module>
-        <module>pmd-ruby</module>
-        <module>pmd-scala-modules/pmd-scala-common</module>
-        <module>pmd-scala-modules/pmd-scala_2.13</module>
-        <module>pmd-scala-modules/pmd-scala_2.12</module>
-        <module>pmd-swift</module>
-        <module>pmd-test</module>
-        <module>pmd-test-schema</module>
-        <module>pmd-tsql</module>
-        <module>pmd-velocity</module>
-        <module>pmd-visualforce</module>
-        <module>pmd-xml</module>
-        <module>pmd-ant</module>
-        <module>pmd-languages-deps</module>
     </modules>
 </project>
