@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
     <artifactId>pmd-java</artifactId>
     <name>PMD Java</name>
@@ -12,7 +11,7 @@
         <relativePath>../pom.xml</relativePath>
     </parent>
 
-    <version>7.7.0-metrics-2-SNAPSHOT</version>
+    <version>7.7.0-metrics-2</version>
 
     <properties>
         <log4j.version>2.23.0</log4j.version>
@@ -131,9 +130,9 @@
                         <configuration>
                             <target>
                                 <ant antfile="${javacc.ant.wrapper}" target="alljavacc">
-                                    <property name="plugin-classpath" refid="maven.plugin.classpath"/>
-                                    <property name="lang-name" value="Java"/>
-                                    <property name="lang-id" value="java"/>
+                                    <property name="plugin-classpath" refid="maven.plugin.classpath" />
+                                    <property name="lang-name" value="Java" />
+                                    <property name="lang-id" value="java" />
                                 </ant>
                             </target>
                         </configuration>
@@ -297,6 +296,6 @@
     </dependencies>
 
     <scm>
-        <tag>pmd_releases/7.7.0-metrics</tag>
+        <tag>pmd_releases/7.7.0-metrics-2</tag>
     </scm>
 </project>
