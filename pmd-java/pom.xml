@@ -11,7 +11,7 @@
         <relativePath>../pom.xml</relativePath>
     </parent>
 
-    <version>7.7.0-metrics-2</version>
+    <version>7.7.0-metrics-3-SNAPSHOT</version>
 
     <properties>
         <log4j.version>2.23.0</log4j.version>
@@ -296,6 +296,6 @@
     </dependencies>
 
     <scm>
-        <tag>pmd_releases/7.7.0-metrics-2</tag>
+        <tag>pmd_releases/7.7.0-metrics</tag>
     </scm>
 </project>
